@@ -1,0 +1,63 @@
+<style>
+  ngb-datepicker {
+    display: none;
+  }
+</style>
+<form class = "form-inline">
+  <div class = "form-group">
+    <div class = "input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></span>
+      </div>
+      <i class="fa fa-calendar"></i>
+      <input class = "form-control" type="daterange" name="dp" [displayMonths] = "displayMonths"
+      [navigation]="navigation" [showWeekNumbers] = "showWeekNumbers" [(ngModel)] = "fromDate" 
+      [dayTemplate] = "t" (navigate)="date = $event.next" ngbDatepicker #d="ngbDatepicker">
+      <input class = "form-control" type="daterange" name="dp2" [displayMonths] = "displayMonths"
+      [navigation]="navigation" [showWeekNumbers] = "showWeekNumbers" [(ngModel)] = "toDate" 
+      [dayTemplate] = "t" (navigate)="date = $event.next" ngbDatepicker #d="ngbDatepicker">      
+      <div class="input-group-append d-inline-block" ngbDropdown>
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button class="dropdown-item" (click)="selectToday()">Today</button>
+          <button class="dropdown-item" (click)="selectYesterday()">Yesterday</button>
+          <button class="dropdown-item" (click)="selectLastMonthThisDay()">Last Month This Day</button>
+          <button class="dropdown-item" (click)="selectLastSevenDays()">Last 7 days</button>
+          <button class="dropdown-item" (click)="selectLastThirtyDays()">Last 30 days</button>
+          <button class="dropdown-item" (click)="selectThisMonth()">This Month</button>
+          <button class="dropdown-item" (click)="selectLastMonth()">Last Month</button>
+          <button class="dropdown-item" (click)="toggleShow()">Custom Range</button>
+          <button type="button" class="btn btn-success" (click)="apply()">Apply</button>
+          <button type="button" class="btn btn-light" (click)="cancel()">Cancel</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<br/>
+<pre>From: {{ fromDate | json }}</pre>
+<pre>To: {{ toDate | json }} </pre>
+<ngb-datepicker #dp3 (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t">
+</ngb-datepicker>
+
+<ng-template #t let-date="date" let-focused="focused">
+  <span class="custom-day"
+        [class.focused]="focused"
+        [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+        [class.faded]="isHovered(date) || isInside(date)"
+        (mouseenter)="hoveredDate = date"
+        (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
+</ng-template>
+<div class="row">
+<button class="badge badge-primary" (click)="close(item)" *ngFor="let item of arrayList2" [ngStyle]="{'display': display}">{{item}} </button>
+</div>
+<div ngbDropdown class="d-inline-block">
+  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Add Chips</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+    <button class="dropdown-item" *ngFor="let item of arrayList" (click)="add(item)">{{item}}</button>
+  </div>
+</div>
