@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbDateStruct, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
-import * as $ from 'jquery';
-import { Http, HttpModule } from '@angular/http';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 const now = new Date();
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
@@ -38,14 +37,21 @@ export class AppComponent implements OnInit{
   apiroot: string="http://httpbin.org";
   constructor(
     private calendar: NgbCalendar,
+    private spinner: NgxSpinnerService,
     private httpClient: HttpClient,
   ) {
     this.fromDate = calendar.getToday();
     // this.toDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
-  
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 5000);
+  }
   onDateSelection(date: NgbDateStruct) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
@@ -94,7 +100,7 @@ export class AppComponent implements OnInit{
     this.toDate = {year: now.getFullYear(), month: now.getMonth(), day: new Date(now.getFullYear(), now.getMonth()+1, 0).getDate()};
     this.fromDate = {year: now.getFullYear(), month: now.getMonth(), day: 1};
   }
-  
+
   toggleShow() {
     let elem = <HTMLElement>document.querySelector('ngb-datepicker');
     if(elem.style.display == 'inline-block'){
